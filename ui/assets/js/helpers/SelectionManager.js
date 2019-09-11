@@ -32,10 +32,11 @@ export const SelectionManager = {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
             return {
-                text: selectionText,
+                text: selectionText.trim(),
                 url: searchURL,
-                left: selectionRect.left + selectionRect.width + 5,
-                top: selectionRect.top + scrollTop + 5
+                left: selectionRect.left,
+                top: selectionRect.top + scrollTop + 25,
+                node: anchorNode
             };
 
         }

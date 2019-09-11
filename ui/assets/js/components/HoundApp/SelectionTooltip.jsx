@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Model } from "../../helpers/Model";
 import { SelectionManager } from '../../helpers/SelectionManager';
+import { closestElement } from '../../utils';
 
 export const SelectionTooltip = (props) => {
 
@@ -11,7 +13,8 @@ export const SelectionTooltip = (props) => {
         url: '',
         top: 0,
         left: 0,
-        text: ''
+        text: '',
+        file: false
     });
 
     let timeoutDelay;
@@ -29,8 +32,41 @@ export const SelectionTooltip = (props) => {
                     const selection = SelectionManager.GetSelection();
 
                     if (selection) {
-                        setData(selection);
+
+                        let file = false;
+                        let url = selection.url;
+                        const { top, left, text, node } = selection;
+
+                        const repo = closestElement(node, 'repo');
+
+                        if (repo) {
+                            const repoData = Model.repos[ repo.dataset.repo ];
+                            if (
+                                repoData &&
+                                repoData['pattern-link-reg'] &&
+                                repoData['pattern-link-reg'].test(text)
+                            ) {
+                                repoData['pattern-links'].some((item) => {
+                                    if (item.reg.test(text)) {
+                                        url = text.replace(item.reg, item.link);
+                                        file = true;
+                                        return true;
+                                    }
+                                });
+                            }
+
+                        }
+
+                        setData({
+                            url: url,
+                            top: top,
+                            left: left,
+                            text: text,
+                            file
+                        });
+
                         setActive(true);
+
                     } else {
                         setActive(false);
                     }
@@ -54,7 +90,7 @@ export const SelectionTooltip = (props) => {
     const element = supported
         ? (
             <a
-                className={ `selection-tooltip octicon octicon-search${ active && ' active' || ''}` }
+                className={ `selection-tooltip octicon ${ data.file && ' octicon-code' || ' octicon-search' }${ active && ' active' || ''}` }
                 href={ data.url }
                 style={{ top: data.top, left: data.left }}
                 onClick={ onClickTooltip }

@@ -425,7 +425,6 @@ button:focus {
 }
 
 .selection-tooltip::after {
-  background-color: #09f;
   content: '';
   display: block;
   height: 20px;
@@ -433,6 +432,14 @@ button:focus {
   right: 0;
   top: 0;
   width: 20px;
+}
+
+.selection-tooltip.octicon-code::after {
+  background-color: #077812;
+}
+
+.selection-tooltip.octicon-search::after {
+  background-color: #09f;
 }
 
 .selection-tooltip.active {

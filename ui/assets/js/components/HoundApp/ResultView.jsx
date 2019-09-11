@@ -28,7 +28,7 @@ export const ResultView = (props) => {
 
     const repos = results
         ? results.map((result, index) => (
-            <div className="repo" key={`results-view-${index}`}>
+            <div className="repo" data-repo={ result.Repo } key={`results-view-${index}`}>
                 <div className="title">
                     <span className="mega-octicon octicon-repo"></span>
                     <span className="name">{ Model.NameForRepo(result.Repo) }</span>
